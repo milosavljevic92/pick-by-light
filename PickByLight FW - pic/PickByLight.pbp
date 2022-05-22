@@ -1,0 +1,175 @@
+  '*********************************************************************
+' Name        : PickByLight.pbp
+' Compiler    : PICBASIC PRO Compiler 3.0
+' Assembler   : PM or MPASM
+' Target PIC  : 18F4550
+' Hardware    : Non specific
+' Oscillator  : internal 
+' Keywords    : Pick By Light Wms Miniload Workstation
+' Description : PICBASIC PRO program to control miniload workstation
+' Author      : Damir Milosavljevic
+' Company     : tecomatic.net
+' Notice      : 
+'*********************************************************************  
+    DEFINE OSC 8
+    asm
+            __CONFIG    _CONFIG1L, _PLLDIV_1_1L & _CPUDIV_OSC1_PLL2_1L & _USBDIV_1_1L
+            __CONFIG    _CONFIG1H, _FOSC_INTOSC_HS_1H & _FCMEN_OFF_1H & _IESO_OFF_1H
+            __CONFIG    _CONFIG2L, _PWRT_ON_2L & _BOR_OFF_2L & _BORV_3_2L & _VREGEN_OFF_2L
+            __CONFIG    _CONFIG2H, _WDT_OFF_2H & _WDTPS_512_2H
+            __CONFIG    _CONFIG3H, _CCP2MX_OFF_3H & _PBADEN_OFF_3H & _LPT1OSC_OFF_3H & _MCLRE_OFF_3H
+            __CONFIG    _CONFIG4L, _STVREN_OFF_4L & _LVP_OFF_4L & _XINST_OFF_4L   
+            __CONFIG    _CONFIG5L, _CP1_ON_5L & _CP0_ON_5L
+            __CONFIG    _CONFIG5H, _CPB_ON_5H & _CPD_ON_5H          
+    endasm   
+    '///mapiranje ulazno izlaznih pinova, govorimo programu kako cemo u nastavku programa pisati njegov ulazno izlazni pin i da li ga koristimo kao ulaz ili kao izlaz      
+    'serijski port
+    DEFINE SER2_BITS 8
+    DEFINE CHAR_PACING 1000
+    _rs232Tx         var PORTD.7
+    _rs232Rx         var PORTD.6
+    output _rs232tx
+    input _rs232Rx
+
+    'set ulaza 
+    _inputA1         var PORTA.0
+    _inputA2         var PORTA.1  
+    _inputA3         var PORTA.2
+    _inputA4         var PORTA.3 
+
+    input _inputA1 
+    input _inputa2 
+    input _inputA3 
+    input _inputA4 
+    'set izlaznih pinova 
+    _OutputA1         var PORTD.2
+    _OutputA2         var PORTD.3 
+    _OutputA3         var PORTD.1
+    _OutputA4         var PORTD.0
+    output _OutputA1
+    output _OutputA2
+    output _OutputA3
+    output _OutputA4
+    
+    NewStateA1 var bit
+    NewStateA2 var bit                       
+    NewStateA3 var bit
+    NewStateA4 var bit    
+    OldStateA1 var bit      
+    OldStateA2 var bit         
+    OldStateA3 var bit         
+    OldStateA4 var bit     
+    InputA1 var bit  
+    InputA2 var bit     
+    InputA3 var bit    
+    InputA4 var bit 
+    tmp var byte[15]
+    clear
+    '//Konstante koje èesto koristimo u programu 
+    majorVer con 1
+    revisionVer con 5
+    rs232_bps con 6 '9600 bps
+
+    ADCON1              = $0F 'iskljuèi komparatore na  portevima
+    CMCON               = $7
+    INTCON2.7           = $0 'ukljuciti interne pull na portb
+    UCON.3              = $0 '
+    UCFG.3              = $1 
+    PORTB               = $00 'postavi sve na portu B na 0
+    PORTC               = $00 'postavi sve na portu B na 0
+    OSCCON              = %01110110 'setovanje osccon registra    
+    '///Definisanje svih promenjivih u RAM memoriji  
+    'bajt 0 - 255
+    x                   var byte   
+    INCLUDE "DT_INTS-18.bas"         ; Base Interrupt System
+    INCLUDE "ReEnterPBP-18.bas"     ; Include if using PBP interrupts
+  
+    ASM
+    INT_LIST  macro    
+         INT_Handler   TMR1_INT,  _DoInputs,   PBP,  yes
+        endm
+        INT_CREATE               
+    endasm
+    T1CON = %00110001                      
+    @ INT_ENABLE  TMR1_INT  'Upali tajmer  
+      _OutputA1 = 0
+      _OutputA2 = 0
+      _OutputA3 = 0
+      _OutputA4 = 0
+
+    pause 500	                   
+'******************************************************************************************  
+Init:  
+    sEROUT _rs232Tx,rs232_bps,[".........................................................................", 13,10] 
+    sEROUT _rs232Tx,rs232_bps,["Init start", 13,10] 
+    SEROUT _rs232Tx,rs232_bps,["PickByLight FW:",#majorVer,".",#revisionver,13,10]
+    SEROUT _rs232Tx,rs232_bps,["Tecomatic.net - Novi Sad",13,10]
+    SEROUT _rs232Tx,rs232_bps,["Year: 2021",13,10] 
+    SEROUT _rs232Tx,rs232_bps,["FW realese: 18.01.2021",13,10] 
+    sEROUT _rs232Tx,rs232_bps,[".........................................................................", 13,10] 
+    pause 30 
+    gosub SendInterfaceDetail 
+    goto Main
+'******************************************************************************************
+Main:  
+    gosub DoOutputs  
+    pause 50
+goto Main 
+
+'******************************************************************************************
+DoInputs:
+    gosub ReadInputs
+    if InputA1 = 1 or InputA2 = 1 or InputA3 = 1 or InputA4 = 1  then gosub senddata
+@ INT_RETURN
+'******************************************************************************************
+SendData:
+      sEROUT _rs232Tx,rs232_bps,["PBL-IN->",#InputA1,#InputA2,#InputA3,#InputA4,13,10] 
+      pause 50
+Return
+'******************************************************************************************
+DoOutputs:
+     serin  _rs232Rx ,rs232_bps,["PBL-OUT->"],tmp[0],tmp[1],tmp[2],tmp[3]
+    _OutputA1 = tmp[0]
+    _OutputA2 = tmp[1]
+    _OutputA3 = tmp[2]
+    _OutputA4 = tmp[3] 
+    _rs232Rx = 0
+return
+'******************************************************************************************
+SendInterfaceDetail: 
+    sEROUT _rs232Tx,rs232_bps,["Interface SN:","4455",13,10] 
+return
+'******************************************************************************************
+ReadInputs: 
+    NewStateA1 =  _inputA1
+    NewStateA2 =  _inputA2
+    NewStateA3 =  _inputA3
+    NewStateA4 =  _inputA4
+    if NewStateA1 < OldStateA1 then 
+        InputA1 = 1 
+    else
+        InputA1 = 0 
+    ENDIF   
+    if NewStateA2 < OldStateA2 then 
+        InputA2 = 1
+    else 
+        InputA2 = 0
+    ENDIF    
+    if NewStateA3 < OldStateA3 then 
+        InputA3= 1
+    else
+        InputA3= 0
+    ENDIF    
+    if NewStateA4 < OldStateA4 then 
+        InputA4 = 1
+    else
+        InputA4 = 0
+    ENDIF    
+    OldStateA1 = NewStateA1       
+    OldStateA2 = NewStateA2 
+    OldStateA3 = NewStateA3          
+    OldStateA4 = NewStateA4         
+return
+'******************************************************************************************
+end 'kraj :) 
+

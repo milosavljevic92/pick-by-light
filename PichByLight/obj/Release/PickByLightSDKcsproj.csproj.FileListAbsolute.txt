@@ -1,0 +1,6 @@
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\bin\Release\PickByLightSDK.dll
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\bin\Release\PickByLightSDK.pdb
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\bin\Release\PickByLightSDK.tlb
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\obj\Release\PickByLightSDKcsproj.csproj.CoreCompileInputs.cache
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\obj\Release\PickByLightSDK.dll
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\obj\Release\PickByLightSDK.pdb

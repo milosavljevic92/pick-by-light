@@ -1,0 +1,5 @@
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\bin\Debug\PickByLight.dll
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\bin\Debug\PickByLight.pdb
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\obj\Debug\PichByLight.csproj.CoreCompileInputs.cache
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\obj\Debug\PickByLight.dll
+C:\Users\dmilosavljevic\source\repos\PichByLight\PichByLight\obj\Debug\PickByLight.pdb

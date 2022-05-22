@@ -1,0 +1,5 @@
+NAME PickByLightSDK
+LIBRARY VBDemo
+DESCRIPTION "Example of classic DLL in VB"
+EXPORTS DllMain @1
+        PickByLightSDK @2

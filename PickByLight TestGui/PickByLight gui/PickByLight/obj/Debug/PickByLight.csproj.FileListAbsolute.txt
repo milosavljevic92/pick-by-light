@@ -1,0 +1,12 @@
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\bin\Debug\PickByLight.exe.config
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\bin\Debug\PickByLight.exe
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\bin\Debug\PickByLight.pdb
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\bin\Debug\PickByLightSDK.dll
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\bin\Debug\PickByLightSDK.pdb
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\obj\Debug\PickByLight.frmMain.resources
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\obj\Debug\PickByLight.Properties.Resources.resources
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\obj\Debug\PickByLight.csproj.GenerateResource.cache
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\obj\Debug\PickByLight.csproj.CoreCompileInputs.cache
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\obj\Debug\PickByLight.csproj.CopyComplete
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\obj\Debug\PickByLight.exe
+C:\Users\dmilosavljevic\source\repos\PickByLight gui\PickByLight\obj\Debug\PickByLight.pdb
